@@ -1,0 +1,35 @@
+-------------------ToDo-------------------
+D:&cd D:\USER\Downloads\ATLAS\Projects\Mastering-Security-Token-ERC-3643\w3a-quick-start
+
+Address created: 0x7a82c50eDDc576d5Cd26b530424D7d465D311bB9
+
+I. Connect web3auth
+
+Client ID Web3Auth Firebase: BF1YoXGl61BMnkGgRhNbAdBEbUWqyUI0Se-tn8T9DL75b9M8iw0TngdWbdBFjkOoYA9YVeQ9Jgy2SM2DHJnbSl4
+
+Client ID Web3Auth Google: BH855-UE0U6H-Cvq1O2ukHMU09JPtllkDAZkFUhiSQEg86iVoD1yaCxpMUa1TzYpWLuXuBsp_VvFnFUUUhJoV1Q
+
+Verifier name: web3auth-google-verifier001
+
+Google Client ID: 947022819304-okcm8e1nq14m0vm8i8bmocpim6th1hep.apps.googleusercontent.com
+
+
+CONTINUE HERE:
+
+Upload the code to a github repo.
+
+Follow chatgpt guidance to create an input textbox
+
+
+
+II. Test interacting with smart contracts already deployed.
+Balance of a wallet sent by parameter.
+
+III. Deploy smart contracts on testnet
+
+IV. Launch online using vercel/simmilar
+
+
+
+V. Get initial tokens distribution
+
