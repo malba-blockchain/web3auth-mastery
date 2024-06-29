@@ -1,9 +1,12 @@
+D:&cd D:\USER\Downloads\ATLAS\Projects\Mastering-Security-Token-ERC-3643\Web3Auth-Mastering\w3a-google-demo&npm run start
+
+npm install
+npm run start
+
+
 -------------------ToDo-------------------
-D:&cd D:\USER\Downloads\ATLAS\Projects\Mastering-Security-Token-ERC-3643\w3a-quick-start
 
-Address created: 0x7a82c50eDDc576d5Cd26b530424D7d465D311bB9
-
-I. Connect web3auth
+I. Connect web3auth DONE
 
 Client ID Web3Auth Firebase: BF1YoXGl61BMnkGgRhNbAdBEbUWqyUI0Se-tn8T9DL75b9M8iw0TngdWbdBFjkOoYA9YVeQ9Jgy2SM2DHJnbSl4
 
@@ -14,22 +17,38 @@ Verifier name: web3auth-google-verifier001
 Google Client ID: 947022819304-okcm8e1nq14m0vm8i8bmocpim6th1hep.apps.googleusercontent.com
 
 
+
+
+II. Test interacting with smart contracts already deployed. DONE
+
+
+
+-------------------DONE-------------------
+
+III. Deploy smart contracts on testnet and verify them
+
+IV. Create interactions with the deployed smart contract using web3auth interface.
+
+V. Launch online using vercel/simmilar
+
+
 CONTINUE HERE:
 
-Upload the code to a github repo.
-
-Follow chatgpt guidance to create an input textbox
 
 
 
-II. Test interacting with smart contracts already deployed.
-Balance of a wallet sent by parameter.
+----------------------------------------------------------------
 
-III. Deploy smart contracts on testnet
+Web3 auth created
+0x7a82c50eDDc576d5Cd26b530424D7d465D311bB9
 
-IV. Launch online using vercel/simmilar
+Main wallet
+0xB803cB7d42291DC78C5f4Db23B7363c04c6274A4
 
 
+Smart contract to test interaction
+0x98FDf4369d35f4dC6764EE108438EF0025C8f78b
 
-V. Get initial tokens distribution
-
+Wallet addresses to test interaction
+0x5Ec8e52C7d7f502c778689d8ba5aD747950E6093
+0xFfD76ff981cc7EA15EE2F67680815763C4C7683E

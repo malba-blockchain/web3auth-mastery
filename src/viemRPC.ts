@@ -1,9 +1,13 @@
-import { createWalletClient, createPublicClient, custom, formatEther, parseEther} from 'viem'
-import { mainnet, polygonAmoy, sepolia } from 'viem/chains'
+import { createWalletClient, createPublicClient, custom, formatEther, parseEther} from 'viem';
+import { mainnet, polygonAmoy, sepolia } from 'viem/chains';
+import Web3 from 'web3';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { IProvider } from "@web3auth/base";
 
+const web3 = new Web3();
+const ERC20_ABI = [{"constant": true,"inputs": [],"name": "name","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [{"name": "_spender","type": "address"},{"name": "_value","type": "uint256"}],"name": "approve","outputs": [{"name": "","type": "bool"}],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "totalSupply","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [{"name": "_from","type": "address"},{"name": "_to","type": "address"},{"name": "_value","type": "uint256"}],"name": "transferFrom","outputs": [{"name": "","type": "bool"}],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "decimals","outputs": [{"name": "","type": "uint8"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "_owner","type": "address"}],"name": "balanceOf","outputs": [{"name": "balance","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "symbol","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [{"name": "_to","type": "address"},{"name": "_value","type": "uint256"}],"name": "transfer","outputs": [{"name": "","type": "bool"}],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [{"name": "_owner","type": "address"},{"name": "_spender","type": "address"}],"name": "allowance","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"payable": true,"stateMutability": "payable","type": "fallback"},{"anonymous": false,"inputs": [{"indexed": true,"name": "owner","type": "address"},{"indexed": true,"name": "spender","type": "address"},{"indexed": false,"name": "value","type": "uint256"}],"name": "Approval","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "from","type": "address"},{"indexed": true,"name": "to","type": "address"},{"indexed": false,"name": "value","type": "uint256"}],"name": "Transfer","type": "event"}];
+//const ERC20_ABI = ["function balanceOf(address owner) view returns (uint256)"];
 
 export default class EthereumRpc {
     private provider: IProvider;
@@ -121,19 +125,41 @@ async getAddresses(): Promise<any> {
     }
   }
 
-  async balanceOf(): Promise<string> {
+  async balanceOf(address: any): Promise<string> {
     try {
       const publicClient = createPublicClient({
-          chain: this.getViewChain(),
-          transport: custom(this.provider)
-        })
-        
-      const address = await this.getAccounts();
-      const balance = await publicClient.getBalance({address: address[0]});
-      console.log(balance)
+        chain: this.getViewChain(),
+        transport: custom(this.provider)
+      });
+  
+      const balance = await publicClient.getBalance({address: address });
+      console.log(balance);
       return formatEther(balance);
     } catch (error) {
+      console.error(error);
       return error as string;
+    }
+  }
+
+  async smartContractBalanceOf(walletAddress: any, smartContractAddress: any): Promise<string> {
+    try {
+      const publicClient = createPublicClient({
+        chain: this.getViewChain(),
+        transport: custom(this.provider)
+      });
+  
+      const balance: string = await publicClient.readContract({
+        address: smartContractAddress,
+        abi: ERC20_ABI,
+        functionName: 'balanceOf',
+        args: [walletAddress]
+      }) as unknown as string;
+  
+      console.log(balance);
+      return web3.utils.fromWei(balance, 'ether'); // Convert balance from wei to ether
+    } catch (error) {
+      console.error(error);
+      return error instanceof Error ? error.message : "An error occurred";
     }
   }
 

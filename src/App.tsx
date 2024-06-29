@@ -15,6 +15,11 @@ function App() {
   const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
   const [provider, setProvider] = useState<IProvider | null>(null);
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [showMaticInput, setShowMaticInput] = useState<boolean>(false);
+  const [showTokenInput, setShowTokenInput] = useState<boolean>(false);
+  const [address, setAddress] = useState<string>("");
+  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [smartContractAddress, setSmartContractAddress] = useState<string>("");
 
   useEffect(() => {
     const init = async () => {
@@ -43,7 +48,7 @@ function App() {
             clientId: clientId, //Optional - Provide only if you haven't provided it in the Web3Auth Instantiation Code
             uxMode: "popup",
             loginConfig: {
-              google: {    
+              google: {
                 verifier: "web3auth-google-verifier001",
                 typeOfLogin: "google",
                 clientId: "947022819304-okcm8e1nq14m0vm8i8bmocpim6th1hep.apps.googleusercontent.com", //use your app client id you got from google
@@ -129,7 +134,7 @@ function App() {
     uiConsole(address);
   };
 
-  const getBalance = async () => {
+  const getMaticBalance = async () => {
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
@@ -139,13 +144,23 @@ function App() {
     uiConsole(balance);
   };
 
-  const balanceOf = async () => {
+  const balanceOf = async (address: string) => {
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
     }
     const rpc = new RPC(provider);
-    const balance = await rpc.getBalance();
+    const balance = await rpc.balanceOf(address);
+    uiConsole(balance);
+  };
+
+  const smartContractBalanceOf = async (walletAddress: any, smartContractAddress: any) => {
+    if (!provider) {
+      uiConsole("provider not initialized yet");
+      return;
+    }
+    const rpc = new RPC(provider);
+    const balance = await rpc.smartContractBalanceOf(walletAddress, smartContractAddress);
     uiConsole(balance);
   };
 
@@ -186,6 +201,43 @@ function App() {
     }
   }
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Update the state variable based on the input field's ID
+    if (event.target.id === 'address') {
+      setAddress(event.target.value);
+    } 
+    else if (event.target.id === 'walletAddress') {
+      setWalletAddress(event.target.value);
+    }
+    else if (event.target.id === 'smartContractAddress') {
+      setSmartContractAddress(event.target.value);
+    }
+  };
+
+  const handleCheckBalance = () => {
+    balanceOf(address);
+    setAddress("");
+  };
+
+  const handleMaticBalanceOfClick = () => {
+    setShowMaticInput(!showMaticInput); // Toggle Matic input visibility
+    setAddress("");
+  };
+
+  const handleTokenBalanceOfClick = () => {
+    setShowTokenInput(!showTokenInput); // Toggle Token input visibility
+    setWalletAddress("");
+    setSmartContractAddress("");
+  };
+
+  const handleCheckSmartContractBalance = () => {
+    const walletAddress = (document.getElementById('walletAddress') as HTMLInputElement).value;
+    const smartContractAddress = (document.getElementById('smartContractAddress') as HTMLInputElement).value;
+    smartContractBalanceOf(walletAddress, smartContractAddress);
+    setWalletAddress("");
+    setSmartContractAddress("");
+  };
+
   const loggedInView = (
     <>
       <div className="flex-container">
@@ -210,14 +262,36 @@ function App() {
           </button>
         </div>
         <div>
-          <button onClick={getBalance} className="card">
-            Get Balance
+          <button onClick={getMaticBalance} className="card">
+            Get Matic Balance
           </button>
         </div>
         <div>
-          <button onClick={balanceOf} className="card">
-            Balance Of
+          <button onClick={handleMaticBalanceOfClick} className="card">
+            Matic Balance Of
           </button>
+          {showMaticInput && (
+            <div>
+              <input type="text" value={address} id="address" onChange={handleInputChange} placeholder="Enter address"/>
+              <button onClick={handleCheckBalance} className="card" style={{ backgroundColor: '#0070f3', color: 'white' }}>
+                Check Matic Balance
+              </button>
+            </div>
+          )}
+        </div>
+        <div>
+          <button onClick={handleTokenBalanceOfClick} className="card">
+            Token Balance Of
+          </button>
+          {showTokenInput && (
+            <div>
+              <input type="text" value={smartContractAddress} id="smartContractAddress" onChange={handleInputChange} placeholder="Enter smart contract address"/>
+              <input type="text" value={walletAddress} id="walletAddress" onChange={handleInputChange} placeholder="Enter wallet address"/>
+              <button onClick={handleCheckSmartContractBalance} className="card" style={{ backgroundColor: '#0070f3', color: 'white' }}>
+                Check Token Balance
+              </button>
+            </div>
+          )}
         </div>
         <div>
           <button onClick={signMessage} className="card">
@@ -245,6 +319,7 @@ function App() {
       </div>
     </>
   );
+
   const unloggedInView = (
     <button onClick={login} className="card">
       Login
